@@ -1,7 +1,6 @@
 import flask as fl
 import subprocess
 import sys
-import os
 import json
 from pathlib import Path
 import codeJudge
@@ -36,7 +35,10 @@ problems = loadProblemList()
 
 @app.route("/")
 def index():
-    return fl.render_template("index.html", problems = problems)
+    selected_problem = fl.request.args.get('problem', '')
+    if not selected_problem:
+        selected_problem = fl.request.cookies.get('last_selected_problem', '')
+    return fl.render_template("index.html", problems = problems, selected_problem = selected_problem)
 
 @app.route("/api/problem/<id>")
 def apiGetProblem(id):
@@ -63,7 +65,7 @@ def judgeTheCode():
         id = fl.request.form['problem_select']
         print(id)
         output = codeJudge.judge(id, data)
-    return fl.render_template("index.html", value = f"{output}", code = data, problems = problems)
+    return fl.render_template("index.html", value = f"{output}", code = data, problems = problems, selected_problem = id)
 
 if __name__ == "__main__":
     app.run(debug=True)

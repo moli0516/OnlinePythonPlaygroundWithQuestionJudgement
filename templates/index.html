@@ -16,9 +16,13 @@
                 <select id="problem_select" name="problem_select">
                     <option value="">Select a question</option>
                     {% for problem in problems %}
-                    <option value="{{ problem.id}}">{{problem.id}} - {{problem.title}}</option>
-                    {% endfor %}
+                    <option value="{{ problem.id }}" 
+                            {% if selected_problem == problem.id %}selected{% endif %}>
+                            {{ problem.id }} - {{ problem.title }}</option>
+                            {% endfor %}
                 </select>
+                
+
                 <div class="textview">
                     <h2 id="problem_title"></h2>
                     <p id="problem_description"></p>

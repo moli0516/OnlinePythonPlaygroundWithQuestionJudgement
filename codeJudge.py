@@ -49,7 +49,7 @@ def judge( id, code):
             output = execuation(code, getExecuationCode(id), stdin[i])
             print(output, stdout[i])
             if output != stdout[i]:
-                return "Result unmatch"
+                return f"Result unmatch. At test case {i}\nInput: {tuple(stdin[i])}\nOutput: {output}\nExpected Output: {stdout[i]}"
         return "Success"
     
     
