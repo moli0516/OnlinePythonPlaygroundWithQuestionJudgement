@@ -5,7 +5,8 @@ import json
 from pathlib import Path
 import codeJudge
 
-DATADIR = Path('instance')
+DATADIR = Path('src\\instance')
+
 
 def loadProblemList():
     problems = []
@@ -22,7 +23,7 @@ def loadProblemList():
     return problems
 
 def loadFullQuestion(id):
-    di = Path(f'instance\\{id}')
+    di = Path(f'src\\instance\\{id}')
     for json_file in di.glob('*.json'):
         with open(json_file, 'r', encoding="utf-8") as f:
             data = json.load(f)

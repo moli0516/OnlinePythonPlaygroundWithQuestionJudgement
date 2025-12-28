@@ -1,11 +1,10 @@
 from pathlib import Path
-import subprocess
-import sys
 import json
-
+import dataStructure as ds
+import copy
 
 def loadInput(id):
-    folder = Path(f"instance\\{id}")
+    folder = Path(f"src\\instance\\{id}")
     for txt in folder.glob("*.txt"):
         if txt.name == "in.txt":
             with open(txt, "r", encoding="utf-8") as f:
@@ -13,7 +12,7 @@ def loadInput(id):
                 return loadedList
                 
 def loadOutput(id):
-    folder = Path(f"instance\\{id}")
+    folder = Path(f"src\\instance\\{id}")
     for txt in folder.glob("*.txt"):
         if txt.name == "out.txt":
             with open(txt, "r", encoding="utf-8") as f:
@@ -21,7 +20,7 @@ def loadOutput(id):
                 return loadedList
             
 def getExecuationCode(id):
-    di = Path(f'instance\\{id}')
+    di = Path(f'src\\instance\\{id}')
     for json_file in di.glob('*.json'):
         with open(json_file, 'r', encoding="utf-8") as f:
             data = json.load(f)
@@ -32,24 +31,25 @@ def execuation(code_string, function_name, args=None, kwargs=None):
         args = []
     if kwargs is None:
         kwargs = {}
-
-        # 創建命名空間
     namespace = {}
     exec(code_string, namespace)
-        
-        # 獲取函數
-    if function_name in namespace:
+    if function_name in namespace :
         func = namespace[function_name]
         return func(*args, **kwargs)
-    
-def judge( id, code):
+
+def isbBuiltinClass(obj):
+    module_name = obj.__class__.__module__
+    return module_name == 'builtins'
+
+def judge(id, code):
         stdin = loadInput(id)
         stdout = loadOutput(id)
         for i in range(len(stdin)):
+            currentInput = copy.deepcopy(stdin[i])
             output = execuation(code, getExecuationCode(id), stdin[i])
-            print(output, stdout[i])
             if output != stdout[i]:
-                return f"Result unmatch. At test case {i}\nInput: {tuple(stdin[i])}\nOutput: {output}\nExpected Output: {stdout[i]}"
+                
+                return f"Result unmatch. At test case {i + 1}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput: {output}\nExpected Output: {stdout[i]}"
         return "Success"
     
     
