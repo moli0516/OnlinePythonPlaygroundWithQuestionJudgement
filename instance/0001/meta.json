@@ -1,0 +1,67 @@
+{
+    "problem": {
+        "id": "0001",
+        "slug": "binarySearch",
+        "title": "二元搜索法",
+        "content": {
+            "description": "給定一個 <b>升序排列</b> 的整數數組 `nums` 和一個目標值 `target`，請你在數組中搜索 `target` 是否存在。如果目標值存在於數組中，返回它的索引（從 0 開始）；否則，返回 `-1`。<br><br>你必須設計並實現一個時間複雜度為 <b>O(log n)</b> 的算法來解決此問題。",
+    
+            "input_format": "n 表示數組的長度，target 表示要查找的目標值。<br>nums 表示 n 個以空格分隔的整數，表示升序排列的數組元素。<br><br>範例輸入：<br>n = 6, target = 9<br>nums = [-1, 0, 3, 5, 9, 12]",
+            
+            "output_format": "輸出一個整數：<br>- 如果 target 存在於 nums 中，輸出 target 的索引（0-based）。<br>- 如果 target 不存在於 nums 中，輸出 -1。<br><br>範例輸出：<br>4",
+            
+            "constraints": [
+            "1 ≤ n ≤ 10⁴",
+            "-10⁴ ≤ nums[i] ≤ 10⁴",
+            "-10⁴ ≤ target ≤ 10⁴",
+            "nums 是一個 <b>嚴格遞增</b> 的數組，即對於所有 i < j，有 nums[i] < nums[j]",
+            "保證數組中沒有重複的元素",
+            "你必須實現時間複雜度為 O(log n) 的算法"
+            ],
+
+            "sampleCode": "def binarySearch(n: int, target: int, nums: list[int]):",
+
+            "execuationCode": "binarySearch",
+            
+            "examples": [
+                {
+                    "input": "n=6, target=9\nnums=[-1, 0, 3, 5, 9, 12]",
+                    "output": "4",
+                    "explanation": "目標值 9 存在於數組中，位於索引 4 的位置。二分查找過程：\n1. 初始範圍 [0,5]，中間索引 2，nums[2]=3 < 9，向右搜索\n2. 範圍 [3,5]，中間索引 4，nums[4]=9 == 9，找到目標"
+                },
+                {
+                    "input": "n=5, target=2\nnums=[1, 3, 5, 7, 9]",
+                    "output": "-1",
+                    "explanation": "目標值 2 不存在於數組中。二分查找過程：\n1. [0,4]，mid=2，nums[2]=5 > 2，向左搜索\n2. [0,1]，mid=0，nums[0]=1 < 2，向右搜索\n3. [1,1]，mid=1，nums[1]=3 > 2，向左搜索\n4. 範圍為空，返回 -1"
+                },
+                {
+                    "input": "n=1, target=0\nnums=[0]",
+                    "output": "0",
+                    "explanation": "數組只有一個元素 [0]，目標值 0 等於該元素，返回索引 0"
+                },
+                {
+                    "input": "n=0, target=5\nnums=[]",
+                    "output": "-1",
+                    "explanation": "空數組，任何目標值都不存在，直接返回 -1"
+                },
+                {
+                    "input": "n=7, target=-5\nnums=[-10, -8, -5, -3, 0, 2, 4]",
+                    "output": "2",
+                    "explanation": "目標值 -5 存在於數組中，位於索引 2 的位置"
+                }
+            ],
+            
+            "notes": [
+            "<b>二分查找算法步驟</b>：<br>1. 初始化左右指針 left=0, right=n-1<br>2. 當 left ≤ right 時循環：<br>   a. 計算中間索引 mid = left + (right - left) // 2<br>   b. 如果 nums[mid] == target，返回 mid<br>   c. 如果 nums[mid] < target，則 left = mid + 1<br>   d. 如果 nums[mid] > target，則 right = mid - 1<br>3. 循環結束後返回 -1",
+            
+            "<b>關鍵要點</b>：<br>- 計算 mid 時使用 `left + (right - left) // 2` 而不是 `(left + right) // 2`，避免整數溢出<br>- 循環條件是 `left ≤ right` 而不是 `left < right`，確保檢查所有元素<br>- 每次比較後要排除中間元素，所以更新 left 或 right 時要加減 1",
+            
+            "<b>時間與空間複雜度分析</b>：<br>- 時間複雜度：O(log n)，每次迭代將搜索範圍減半<br>- 空間複雜度：O(1)，只使用常數額外空間",
+            
+            "<b>常見錯誤</b>：<br>1. 忘記處理空數組的情況<br>2. 在更新 left 或 right 時忘記加減 1，導致無限循環<br>3. 使用錯誤的循環條件，可能漏掉邊界元素<br>4. 整數溢出問題（在大數組中）",
+            
+            "<b>變形題目思考</b>：<br>1. 如果數組中允許重複元素，如何找到第一個出現的位置？<br>2. 如果數組是降序排列的，算法該如何調整？<br>3. 如果不知道數組是否排序，該如何處理？"
+            ]
+        }
+    }
+}
