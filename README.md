@@ -20,7 +20,7 @@ npm install
 
 ## Run on Local
 
-#First Terminal
+First Terminal
 ```shell
 # Windows
 cd src/backend
@@ -28,10 +28,10 @@ cd src/backend
 python app.py
 ```
 
-#Second terminal
+Second terminal
 ```shell
 # Windows
-cd ../frontend
+cd src/frontend
 
 npm start
 ```
