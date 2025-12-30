@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Python Playground MVP</title>
+        
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        
+    </head>
+    <body>
+        <h1 class="title">Python Playground</h1>
+        <form method="post">
+        <div class="row">
+            
+            <div class="form-container" style="padding-right: 5%; width: 50%;">
+                <select id="problem_select" name="problem_select">
+                    <option value="">Select a question</option>
+                    {% for problem in problems %}
+                    <option value="{{ problem.id }}" 
+                            {% if selected_problem == problem.id %}selected{% endif %}>
+                            {{ problem.id }} - {{ problem.title }}</option>
+                            {% endfor %}
+                </select>
+                
+
+                <div class="textview">
+                    <h2 id="problem_title"></h2>
+                    <p id="problem_description"></p>
+                    <p id="problem_input"></p>
+                    <p id="problem_output"></p>
+                    <p id="problem_constraints"></p>
+                    <p id="problem_examples"></p>
+                </div>
+            </div>
+            <div class="form-container">
+                
+                    <label for="code" class="code-label">Enter Python Code:</label>
+                    <textarea 
+                        id="code" 
+                        name="code" 
+                        class="textview"
+                        row="1"
+                        cols="40"
+                        placeholder="# Write your Python code here..."
+                        spellcheck="false"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                    >{{ code if code else '' }}</textarea>
+                    <button type="submit" class="submit-btn" onclick="javascript: form.action='/run_code';">Run Code</button>
+                    <button type="submit" class="submit-btn" onclick="javascript: form.action='/submit_code';">Submit Code</button>
+                </form>
+                    <form>
+                        <label for="terminal" class="code-label">Terminal:</label>
+                        <textarea 
+                            id="code" 
+                            name="terminal" 
+                            class="textview"
+                            cols="40"
+                            row="1"
+                            spellcheck="false"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="off"
+                            readonly
+                        >{{ value if value else '' }}</textarea>
+                </div>
+        </div>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </body>
+</html>

@@ -1,11 +1,12 @@
 import flask as fl
+from flask_cors import CORS
 import subprocess
 import sys
 import json
 from pathlib import Path
 import codeJudge
 
-DATADIR = Path('src\\instance')
+DATADIR = Path('instance')
 
 
 def loadProblemList():
@@ -23,7 +24,7 @@ def loadProblemList():
     return problems
 
 def loadFullQuestion(id):
-    di = Path(f'src\\instance\\{id}')
+    di = Path(f'instance\\{id}')
     for json_file in di.glob('*.json'):
         with open(json_file, 'r', encoding="utf-8") as f:
             data = json.load(f)
@@ -32,6 +33,15 @@ def loadFullQuestion(id):
                 return problem
 
 app = fl.Flask(__name__)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": "http://localhost:3000",  # React 開發服務器
+        "methods": ["POST", "GET", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    }
+})
+
 problems = loadProblemList()    
 
 @app.route("/")
@@ -41,6 +51,13 @@ def index():
         selected_problem = fl.request.cookies.get('last_selected_problem', '')
     return fl.render_template("index.html", problems = problems, selected_problem = selected_problem)
 
+@app.route("/api/problems")
+def apiGetProblems():
+    return fl.jsonify({
+        'success': True,
+        'problems': problems
+    })
+
 @app.route("/api/problem/<id>")
 def apiGetProblem(id):
     content = loadFullQuestion(id)
@@ -49,6 +66,25 @@ def apiGetProblem(id):
             'success': True,
             'info': content
         })
+        
+@app.route("/api/run_code", methods = ["POST"])
+def apiRunCode():
+    data = fl.request.form.get("code", "")
+    output = subprocess.run([sys.executable, "-c",data], capture_output=True, text=True)
+    return fl.jsonify({
+        'success': True,
+        'output': f"{output.stdout}\n{output.stderr}"
+    })
+
+@app.route("/api/submit_code", methods = ["POST"])
+def apiSubmitCode():
+    data = fl.request.form.get("code", "")
+    id = fl.request.form.get('problem_selected', "")
+    output = codeJudge.judge(id, data)
+    return fl.jsonify({
+        'success': True,
+        'output': output
+    })
 
 @app.route("/run_code", methods = ["POST"])
 def processData():

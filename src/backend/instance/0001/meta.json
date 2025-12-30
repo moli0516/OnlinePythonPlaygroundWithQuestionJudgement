@@ -4,11 +4,11 @@
         "slug": "binarySearch",
         "title": "二元搜索法",
         "content": {
-            "description": "給定一個 <b>升序排列</b> 的整數數組 `nums` 和一個目標值 `target`，請你在數組中搜索 `target` 是否存在。如果目標值存在於數組中，返回它的索引（從 0 開始）；否則，返回 `-1`。<br><br>你必須設計並實現一個時間複雜度為 <b>O(log n)</b> 的算法來解決此問題。",
+            "description": "給定一個 <b>升序排列</b> 的整數數組 `nums` 和一個目標值 `target`，請你在數組中搜索 `target` 是否存在。如果目標值存在於數組中，返回它的索引（從 0 開始）；否則，返回 `-1`。\n\n你必須設計並實現一個時間複雜度為 <b>O(log n)</b> 的算法來解決此問題。",
     
-            "input_format": "n 表示數組的長度，target 表示要查找的目標值。<br>nums 表示 n 個以空格分隔的整數，表示升序排列的數組元素。<br><br>範例輸入：<br>n = 6, target = 9<br>nums = [-1, 0, 3, 5, 9, 12]",
+            "input_format": "n 表示數組的長度，target 表示要查找的目標值。\nnums 表示 n 個以空格分隔的整數，表示升序排列的數組元素。\n\n範例輸入：\nn = 6, target = 9\nnums = [-1, 0, 3, 5, 9, 12]",
             
-            "output_format": "輸出一個整數：<br>- 如果 target 存在於 nums 中，輸出 target 的索引（0-based）。<br>- 如果 target 不存在於 nums 中，輸出 -1。<br><br>範例輸出：<br>4",
+            "output_format": "輸出一個整數：\n- 如果 target 存在於 nums 中，輸出 target 的索引（0-based）。\n- 如果 target 不存在於 nums 中，輸出 -1。\n\n範例輸出：\n4",
             
             "constraints": [
             "1 ≤ n ≤ 10⁴",
@@ -52,15 +52,15 @@
             ],
             
             "notes": [
-            "<b>二分查找算法步驟</b>：<br>1. 初始化左右指針 left=0, right=n-1<br>2. 當 left ≤ right 時循環：<br>   a. 計算中間索引 mid = left + (right - left) // 2<br>   b. 如果 nums[mid] == target，返回 mid<br>   c. 如果 nums[mid] < target，則 left = mid + 1<br>   d. 如果 nums[mid] > target，則 right = mid - 1<br>3. 循環結束後返回 -1",
+            "<b>二分查找算法步驟</b>：\n1. 初始化左右指針 left=0, right=n-1\n2. 當 left ≤ right 時循環：\n   a. 計算中間索引 mid = left + (right - left) // 2\n   b. 如果 nums[mid] == target，返回 mid\n   c. 如果 nums[mid] < target，則 left = mid + 1\n   d. 如果 nums[mid] > target，則 right = mid - 1\n3. 循環結束後返回 -1",
             
-            "<b>關鍵要點</b>：<br>- 計算 mid 時使用 `left + (right - left) // 2` 而不是 `(left + right) // 2`，避免整數溢出<br>- 循環條件是 `left ≤ right` 而不是 `left < right`，確保檢查所有元素<br>- 每次比較後要排除中間元素，所以更新 left 或 right 時要加減 1",
+            "<b>關鍵要點</b>：\n- 計算 mid 時使用 `left + (right - left) // 2` 而不是 `(left + right) // 2`，避免整數溢出\n- 循環條件是 `left ≤ right` 而不是 `left < right`，確保檢查所有元素\n- 每次比較後要排除中間元素，所以更新 left 或 right 時要加減 1",
             
-            "<b>時間與空間複雜度分析</b>：<br>- 時間複雜度：O(log n)，每次迭代將搜索範圍減半<br>- 空間複雜度：O(1)，只使用常數額外空間",
+            "<b>時間與空間複雜度分析</b>：\n- 時間複雜度：O(log n)，每次迭代將搜索範圍減半\n- 空間複雜度：O(1)，只使用常數額外空間",
             
-            "<b>常見錯誤</b>：<br>1. 忘記處理空數組的情況<br>2. 在更新 left 或 right 時忘記加減 1，導致無限循環<br>3. 使用錯誤的循環條件，可能漏掉邊界元素<br>4. 整數溢出問題（在大數組中）",
+            "<b>常見錯誤</b>：\n1. 忘記處理空數組的情況\n2. 在更新 left 或 right 時忘記加減 1，導致無限循環\n3. 使用錯誤的循環條件，可能漏掉邊界元素\n4. 整數溢出問題（在大數組中）",
             
-            "<b>變形題目思考</b>：<br>1. 如果數組中允許重複元素，如何找到第一個出現的位置？<br>2. 如果數組是降序排列的，算法該如何調整？<br>3. 如果不知道數組是否排序，該如何處理？"
+            "<b>變形題目思考</b>：\n1. 如果數組中允許重複元素，如何找到第一個出現的位置？\n2. 如果數組是降序排列的，算法該如何調整？\n3. 如果不知道數組是否排序，該如何處理？"
             ]
         }
     }
