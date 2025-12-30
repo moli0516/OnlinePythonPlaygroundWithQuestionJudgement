@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('react-syntax-highlighter', () => ({
+  Prism: ({ children }) => <pre>{children}</pre>,
+}));
+
+jest.mock('react-syntax-highlighter/dist/esm/styles/prism', () => ({
+  atomDark: {},
+}));
+
+test('renders playground header and problem selector', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/Python sandbox/i)).toBeInTheDocument();
+  expect(screen.getByText(/Choose a challenge/i)).toBeInTheDocument();
 });

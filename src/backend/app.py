@@ -1,4 +1,5 @@
 import flask as fl
+import os
 from flask_cors import CORS
 import subprocess
 import sys
@@ -24,7 +25,7 @@ def loadProblemList():
     return problems
 
 def loadFullQuestion(id):
-    di = Path(f'instance\\{id}')
+    di = Path("instance") / id
     for json_file in di.glob('*.json'):
         with open(json_file, 'r', encoding="utf-8") as f:
             data = json.load(f)
@@ -66,6 +67,24 @@ def apiGetProblem(id):
             'success': True,
             'info': content
         })
+
+@app.route("/api/problem/<id>/case")
+def apiGetProblemCase(id):
+    try:
+        inputs = codeJudge.loadInput(id)
+        outputs = codeJudge.loadOutput(id)
+        if not inputs or not outputs:
+            return fl.jsonify({"success": False, "message": "No test cases found."}), 404
+        return fl.jsonify({
+            "success": True,
+            "case": {
+                "input": inputs[0],
+                "expected": outputs[0]
+            },
+            "exec": codeJudge.getExecuationCode(id)
+        })
+    except Exception as e:
+        return fl.jsonify({"success": False, "message": str(e)}), 500
         
 @app.route("/api/run_code", methods = ["POST"])
 def apiRunCode():
@@ -105,4 +124,6 @@ def judgeTheCode():
     return fl.render_template("index.html", value = f"{output}", code = data, problems = problems, selected_problem = id)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", "8000"))
+    app.run(debug=True, host=host, port=port)

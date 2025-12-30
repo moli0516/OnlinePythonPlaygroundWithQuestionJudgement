@@ -7,6 +7,9 @@
 ---
 
 ## Install
+
+### Windows
+
 ```shell
 # Windows
 pip install Flask
@@ -16,12 +19,32 @@ cd src/frontend
 npm install
 ```
 
+### MacOS
+
+#### First terminal
+
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install Flask Flask-Cors
+cd src/backend
+python3 app.py 
+```
+
+#### Second terminal
+
+```shell
+cd src/frontend
+npm install
+npm start 
+```
+
 ---
 
 ## Run on Local
 
 ```shell
-# Windows
+# Windows and MacOS
 cd src/backend
 
 python app.py

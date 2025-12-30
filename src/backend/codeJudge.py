@@ -1,10 +1,9 @@
 from pathlib import Path
 import json
-import dataStructure as ds
 import copy
 
 def loadInput(id):
-    folder = Path(f"instance\\{id}")
+    folder = Path("instance") / id
     for txt in folder.glob("*.txt"):
         if txt.name == "in.txt":
             with open(txt, "r", encoding="utf-8") as f:
@@ -12,7 +11,7 @@ def loadInput(id):
                 return loadedList
                 
 def loadOutput(id):
-    folder = Path(f"instance\\{id}")
+    folder = Path("instance") / id
     for txt in folder.glob("*.txt"):
         if txt.name == "out.txt":
             with open(txt, "r", encoding="utf-8") as f:
@@ -20,7 +19,7 @@ def loadOutput(id):
                 return loadedList
             
 def getExecuationCode(id):
-    di = Path(f'instance\\{id}')
+    di = Path("instance") / id
     for json_file in di.glob('*.json'):
         with open(json_file, 'r', encoding="utf-8") as f:
             data = json.load(f)
