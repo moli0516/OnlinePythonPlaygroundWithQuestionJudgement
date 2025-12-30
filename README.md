@@ -6,13 +6,28 @@
 
 ---
 
+## Install
+```shell
+# Windows
+pip install Flask
+
+cd src/frontend
+
+npm install
+```
+
+---
+
 ## Run on Local
 
 ```shell
 # Windows
 cd src/backend
+
 python app.py
+
 cd ../frontend
+
 npm start
 ```
 
@@ -29,9 +44,11 @@ npm start
 ```
 /api/run_code
 ```
+
 > ### Execute the code you typed on Editor and show the standard output
 
 ```
 /api/submit_code
 ```
+
 > ### Execute the function provided by sample code and do comparison test for the return value of the function and the test cases
