@@ -690,7 +690,7 @@ function CodeForm({ selectedProblemId = "" }) {
     setIsSubmitting(true);
     try {
       const formdata = new FormData();
-      formdata.append("problem_selected", selectedProblemId);
+      formdata.append("id", selectedProblemId);
       formdata.append("code", codeValue);
       const response = await fetch("/api/submit_code", {
         method: "POST",
@@ -803,6 +803,7 @@ function App() {
           <CodeForm selectedProblemId={selectedProblemId} />
         </div>
       </main>
+      
     </div>
   );
 }

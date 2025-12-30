@@ -4,11 +4,11 @@
         "slug": "Remove n boxes",
         "title": "移除箱子",
         "content": {
-            "description": "給定一個 <b>堆叠</b>  `boxes` 包含 `k` 個箱子，和一個整數 `n`，堆叠底下有 `n` 個箱子是腐爛的。\n<b>rev(a, b)</b> 是一個可以把堆叠 `a` 的元素轉移至堆叠 `b` 倒轉順序的步驟。\n請移除所有腐爛的箱子，返回結果堆叠",
+            "description": "給定一個 <b>堆叠</b>  <b>boxes</b>  包含   個箱子，和一個整數 <b>n</b>，堆叠底下有 <b>n</b> 個箱子是腐爛的。<br><b>rev(a, b)</b> 是一個可以把堆叠 <b>a</b> 的元素轉移至堆叠 <b>b</b> 倒轉順序的步驟。<br>請移除所有腐爛的箱子，返回結果堆叠<br><br>使用者可以使用 <b>dataStructure</b> 模組中的 <b>Stack</b> 類別來表示堆叠，並使用其 <b>pop</b> 和 <b>push</b> 方法來操作堆叠。<br>初始化堆叠時，可以將一個列表傳遞給 <b>Stack</b> 類別的構造函數。<br><br>例如<pre><code>boxes = ds.Stack([1, 2, 3])</pre></code> 表示一個包含元素 1、2、3 的堆叠，其中 1 在堆叠的底部，3 在堆叠的頂部。",
     
-            "input_format": "boxes 表示<b>堆叠。</b>\nn 表示腐爛的箱子數量。\n\n範例輸入：\nboxes = [1, 2, 4, 10, 9], n = 3",
+            "input_format": "boxes 表示<b>堆叠。</b><br>n 表示腐爛的箱子數量。<br><br>範例輸入：<br>boxes = [1, 2, 4, 10, 9], n = 3",
             
-            "output_format": "輸出一個移除腐爛箱子後的堆叠：\n\n範例輸出：\n[10, 9]",
+            "output_format": "輸出一個移除腐爛箱子後的堆叠：<br><br>範例輸出：<br>[10, 9]",
             
             "constraints": [
             "0 ≤ n ≤ length of boxes",
@@ -16,7 +16,7 @@
             "0 ≤ length of boxes ≤ 10⁴"
             ],
 
-            "sampleCode": "# definition of stack.\n# class Stack:\n#     def __init__(self, nums = None):\n#         self.nums = nums\n#     def pop(self):\n#         return the top item and remove it\n#     def push(self, val):\n#         add val on the top of the stack\n\ndef removeBoxes(boxes, n: int):",
+            "sampleCode": "# definition of stack.\n# class Stack:\n#     def __init__(self, nums = None):\n#         self.nums = nums\n#     def pop(self):\n#         return the top item and remove it\n#     def push(self, val):\n#         add val on the top of the stack\n\nimport dataStructure as ds\n\ndef rev(a, b):\n    n = len(a.nums)\n    for i in range(n):\n        b.push(a.pop())\n\ndef removeBoxes(boxes, n: int):",
 
             "execName": "removeBoxes",
             
@@ -41,7 +41,7 @@
             "notes": [
             "<b>二分查找算法步驟</b>：\n1. 初始化左右指針 left=0, right=n-1\n2. 當 left ≤ right 時循環：\n   a. 計算中間索引 mid = left + (right - left) // 2\n   b. 如果 nums[mid] == target，返回 mid\n   c. 如果 nums[mid] < target，則 left = mid + 1\n   d. 如果 nums[mid] > target，則 right = mid - 1\n3. 循環結束後返回 -1",
             
-            "<b>關鍵要點</b>：\n- 計算 mid 時使用 `left + (right - left) // 2` 而不是 `(left + right) // 2`，避免整數溢出\n- 循環條件是 `left ≤ right` 而不是 `left < right`，確保檢查所有元素\n- 每次比較後要排除中間元素，所以更新 left 或 right 時要加減 1",
+            "<b>關鍵要點</b>：\n- 計算 mid 時使用 <b>left + (right - left) // 2<b> 而不是 <b>(left + right) // 2<b>，避免整數溢出\n- 循環條件是 <b>left ≤ right<b> 而不是 <b>left < right<b>，確保檢查所有元素\n- 每次比較後要排除中間元素，所以更新 left 或 right 時要加減 1",
             
             "<b>時間與空間複雜度分析</b>：\n- 時間複雜度：O(log n)，每次迭代將搜索範圍減半\n- 空間複雜度：O(1)，只使用常數額外空間",
             
