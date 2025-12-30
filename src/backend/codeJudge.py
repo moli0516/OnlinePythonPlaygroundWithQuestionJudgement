@@ -51,10 +51,10 @@ def judge(id, code):
             currentInput = copy.deepcopy(stdin[i])
             output = execFunction(code, getExecName(id), stdin[i])
             if isinstance(output, Exception):
-                return f"Error occurred: {str(output)} At test case {i + 1}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}"
+                return False, f"Error occurred: {str(output)} At test case {i + 1} / {len(stdin)}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}"
             if output != stdout[i]:
-                return f"Result unmatch. At test case {i + 1}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput: {output}\nExpected Output: {stdout[i]}"
-            
-        return "Success"
+                return False, f"Result unmatch. At test case {i + 1} / {len(stdin)}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput: {output}\nExpected Output: {stdout[i]}"
+
+        return True, f"Success, {len(stdin)} test cases passed."
     
     

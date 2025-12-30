@@ -611,7 +611,7 @@ function CodeForm({ selectedProblemId = "" }) {
         if (data.success) {
           const info = data.info || {};
           setCodeValue(info?.content?.sampleCode || "");
-          setExecName(info?.content?.execuationCode || "");
+          setExecName(info?.content?.execName || "");
         } else {
           setPrefillError("Unable to load sample code for this problem.");
         }

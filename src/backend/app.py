@@ -81,7 +81,7 @@ def apiGetProblemCase(id):
                 "input": inputs[0],
                 "expected": outputs[0]
             },
-            "exec": codeJudge.getExecuationCode(id)
+            "exec": codeJudge.getExecName(id)
         })
     except Exception as e:
         return fl.jsonify({"success": False, "message": str(e)}), 500
