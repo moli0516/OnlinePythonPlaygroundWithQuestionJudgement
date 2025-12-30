@@ -97,13 +97,19 @@ def apiRunCode():
 
 @app.route("/api/submit_code", methods = ["POST"])
 def apiSubmitCode():
-    data = fl.request.form.get("code", "")
-    id = fl.request.form.get('problem_selected', "")
-    output = codeJudge.judge(id, data)
-    return fl.jsonify({
-        'success': True,
-        'output': output
-    })
+    try:
+        data = fl.request.form.get("code", "")
+        id = fl.request.form.get('problem_selected', "")
+        success, output = codeJudge.judge(id, data)
+        return fl.jsonify({
+            'success': success,
+            'output': output
+        })
+    except Exception as e:
+        return fl.jsonify({
+            'success': False,
+            'output': f"Judge error: {e}"
+        }), 500
 
 @app.route("/run_code", methods = ["POST"])
 def processData():

@@ -6,3 +6,83 @@
 .prose code {
   font-family: "JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
+
+.react-simple-code-editor textarea:focus {
+  outline: none !important;
+}
+
+.react-simple-code-editor textarea {
+  caret-color: #fbbf24;
+}
+
+.react-simple-code-editor:focus-within,
+.editor-shell:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.editor-textarea {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Prism token colors for the inline editor */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #94a3b8;
+}
+
+.token.punctuation {
+  color: #cbd5e1;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #fbbf24;
+}
+
+.token.keyword {
+  color: #f97316;
+}
+
+.token.boolean,
+.token.number {
+  color: #facc15;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #22c55e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #38bdf8;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #a78bfa;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #ef4444;
+}

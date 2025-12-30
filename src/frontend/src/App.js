@@ -1,29 +1,29 @@
-import React from 'react';
-import './App.css';
-import Editor from 'react-simple-code-editor';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-python';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import React from "react";
+import "./App.css";
+import Editor from "react-simple-code-editor";
+import Prism from "prismjs";
+import "prismjs/components/prism-python";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-const PYODIDE_JS = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
-const PYODIDE_INDEX = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/';
+const PYODIDE_JS = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js";
+const PYODIDE_INDEX = "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/";
 
 async function ensurePyodideScript() {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === "undefined") return null;
   if (window.loadPyodide) return window.loadPyodide;
 
   await new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${PYODIDE_JS}"]`);
     if (existing) {
-      existing.addEventListener('load', () => resolve());
-      existing.addEventListener('error', reject);
+      existing.addEventListener("load", () => resolve());
+      existing.addEventListener("error", reject);
       return;
     }
-    const script = document.createElement('script');
+    const script = document.createElement("script");
     script.src = PYODIDE_JS;
     script.async = true;
-    script.crossOrigin = 'anonymous';
+    script.crossOrigin = "anonymous";
     script.onload = () => resolve();
     script.onerror = reject;
     document.head.appendChild(script);
@@ -34,22 +34,22 @@ async function ensurePyodideScript() {
 
 function usePyodide() {
   const pyodideRef = React.useRef(null);
-  const [status, setStatus] = React.useState('idle'); // idle | loading | ready | error
-  const [error, setError] = React.useState('');
+  const [status, setStatus] = React.useState("idle"); // idle | loading | ready | error
+  const [error, setError] = React.useState("");
 
   const load = React.useCallback(async () => {
     if (pyodideRef.current) return pyodideRef.current;
-    setStatus('loading');
+    setStatus("loading");
     try {
       const loadPyodide = await ensurePyodideScript();
       const instance = await loadPyodide({ indexURL: PYODIDE_INDEX });
       pyodideRef.current = instance;
-      setStatus('ready');
+      setStatus("ready");
       return instance;
     } catch (err) {
       console.error(err);
-      setError(err?.message || 'Failed to load Pyodide');
-      setStatus('error');
+      setError(err?.message || "Failed to load Pyodide");
+      setStatus("error");
       throw err;
     }
   }, []);
@@ -57,9 +57,9 @@ function usePyodide() {
   const runCode = React.useCallback(
     async (code, { fnName = null, args = [] } = {}) => {
       const pyodide = await load();
-      pyodide.globals.set('user_code', code);
-      pyodide.globals.set('invoke_name', fnName);
-      pyodide.globals.set('invoke_args', args);
+      pyodide.globals.set("user_code", code);
+      pyodide.globals.set("invoke_name", fnName);
+      pyodide.globals.set("invoke_args", args);
       const pyResult = await pyodide.runPythonAsync(`
 import sys, io, traceback, builtins
 stdout, stderr = io.StringIO(), io.StringIO()
@@ -85,9 +85,9 @@ finally:
     sys.stdout, sys.stderr = old_out, old_err
 (stdout.getvalue(), stderr.getvalue(), result_value)
       `);
-      pyodide.globals.delete('user_code');
-      pyodide.globals.delete('invoke_name');
-      pyodide.globals.delete('invoke_args');
+      pyodide.globals.delete("user_code");
+      pyodide.globals.delete("invoke_name");
+      pyodide.globals.delete("invoke_args");
       const [stdoutText, stderrText, resultValue] = pyResult.toJs();
       pyResult.destroy?.();
       return { stdout: stdoutText, stderr: stderrText, resultValue };
@@ -159,9 +159,9 @@ function Header() {
           </div>
           <div className="flex flex-col leading-tight">
             <span className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-300">
-              Playground
+              ICT
             </span>
-            <span className="text-sm font-semibold text-white">Python</span>
+            <span className="text-sm font-semibold text-white">5 StarStar</span>
           </div>
         </div>
 
@@ -200,12 +200,12 @@ function Header() {
 
 function ProblemView({ id }) {
   const [problem, setProblem] = React.useState(null);
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState("");
 
   React.useEffect(() => {
     if (!id) {
       setProblem(null);
-      setError('');
+      setError("");
       return;
     }
 
@@ -216,12 +216,12 @@ function ProblemView({ id }) {
         if (!isActive) return;
         if (data.success) {
           setProblem(data.info);
-          setError('');
+          setError("");
         } else {
-          setError('Unable to load this problem.');
+          setError("Unable to load this problem.");
         }
       })
-      .catch((err) => console.error('Error:', err));
+      .catch((err) => console.error("Error:", err));
 
     return () => {
       isActive = false;
@@ -239,7 +239,7 @@ function ProblemView({ id }) {
   if (!problem) {
     return (
       <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
-        {error || 'Loading problem...'}
+        {error || "Loading problem..."}
       </div>
     );
   }
@@ -277,16 +277,22 @@ function ProblemView({ id }) {
           <>
             <p className="mt-4 font-semibold text-amber-300">Examples</p>
             {problem.content.examples.map((example, i) => (
-              <div key={i} className="rounded-lg bg-slate-800/60 p-3 text-sm text-slate-100">
+              <div
+                key={i}
+                className="rounded-lg bg-slate-800/60 p-3 text-sm text-slate-100"
+              >
                 <p className="font-semibold text-slate-200">Example {i + 1}</p>
                 <p>
-                  <span className="font-semibold text-amber-200">Input:</span> {example.input}
+                  <span className="font-semibold text-amber-200">Input:</span>{" "}
+                  {example.input}
                 </p>
                 <p>
-                  <span className="font-semibold text-amber-200">Output:</span> {example.output}
+                  <span className="font-semibold text-amber-200">Output:</span>{" "}
+                  {example.output}
                 </p>
                 <p>
-                  <span className="font-semibold text-amber-200">Explanation:</span> {example.explanation}
+                  <span className="font-semibold text-amber-200">Explanation:</span>{" "}
+                  {example.explanation}
                 </p>
               </div>
             ))}
@@ -299,25 +305,25 @@ function ProblemView({ id }) {
 
 function ProblemSelect({ selectedProblemId, onSelect }) {
   const [problems, setProblems] = React.useState([]);
-  const [problemsError, setProblemsError] = React.useState('');
+  const [problemsError, setProblemsError] = React.useState("");
 
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/problems', { method: 'GET' });
+        const response = await fetch("/api/problems", { method: "GET" });
         if (!response.ok) {
           throw new Error(`Problems request failed (${response.status})`);
         }
         const data = await response.json();
         if (data.success) {
           setProblems(data.problems);
-          setProblemsError('');
+          setProblemsError("");
         } else {
-          setProblemsError('Unable to load problems from the server.');
+          setProblemsError("Unable to load problems from the server.");
         }
       } catch (err) {
-        console.error('Error:', err);
-        setProblemsError('Unable to load problems from the server.');
+        console.error("Error:", err);
+        setProblemsError("Unable to load problems from the server.");
       }
     }
     fetchData();
@@ -327,7 +333,9 @@ function ProblemSelect({ selectedProblemId, onSelect }) {
     <div className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 shadow-card">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-400">Problems</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-amber-400">
+            Problems
+          </p>
           <h1 className="text-xl font-semibold text-white">Choose a challenge</h1>
         </div>
         <span className="rounded-full bg-slate-800 px-3 py-1 text-xs font-medium text-slate-200">
@@ -353,9 +361,7 @@ function ProblemSelect({ selectedProblemId, onSelect }) {
             </option>
           ))}
         </select>
-        {problemsError ? (
-          <p className="text-sm text-amber-300">{problemsError}</p>
-        ) : null}
+        {problemsError ? <p className="text-sm text-amber-300">{problemsError}</p> : null}
       </div>
 
       <ProblemView id={selectedProblemId} />
@@ -365,11 +371,11 @@ function ProblemSelect({ selectedProblemId, onSelect }) {
 
 function CodeEditor({ value, onChange }) {
   const useTab = (e) => {
-    if (e.key === 'Tab') {
+    if (e.key === "Tab") {
       e.preventDefault();
       const start = e.target.selectionStart;
       const end = e.target.selectionEnd;
-      const next = value.slice(0, start) + '\t' + value.slice(end);
+      const next = value.slice(0, start) + "\t" + value.slice(end);
       onChange(next);
       requestAnimationFrame(() => {
         e.target.selectionStart = e.target.selectionEnd = start + 1;
@@ -378,12 +384,12 @@ function CodeEditor({ value, onChange }) {
   };
 
   const baseClass =
-    'w-full min-h-[380px] rounded-xl border border-amber-500/60 bg-slate-950 text-slate-100 font-mono text-sm leading-6 shadow-inner focus-within:border-amber-400 focus-within:ring-2 focus-within:ring-amber-400/30';
+    "w-full min-h-[380px] rounded-xl border border-amber-500/60 bg-slate-950 text-slate-100 font-mono text-sm leading-6 shadow-inner focus-within:border-amber-400 focus-within:ring-0 focus-within:outline-none";
 
-  const highlight = (code) => Prism.highlight(code, Prism.languages.python, 'python');
+  const highlight = (code) => Prism.highlight(code, Prism.languages.python, "python");
 
   return (
-    <div className={baseClass}>
+    <div className={`${baseClass} editor-shell`}>
       <Editor
         value={value}
         onValueChange={onChange}
@@ -391,14 +397,18 @@ function CodeEditor({ value, onChange }) {
         padding={14}
         textareaId="code"
         className="whitespace-pre-wrap"
+        textareaClassName="editor-textarea"
         style={{
-          minHeight: '380px',
-          fontFamily: '"JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          minHeight: "380px",
+          fontFamily:
+            '"JetBrains Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace',
           fontSize: 14,
-          lineHeight: '1.6',
-          background: 'transparent',
-          color: '#e2e8f0',
-          outline: 'none',
+          lineHeight: "1.6",
+          background: "transparent",
+          color: "#e2e8f0",
+          outline: "none",
+          border: "none",
+          caretColor: "#fbbf24",
         }}
         onKeyDown={useTab}
       />
@@ -406,20 +416,20 @@ function CodeEditor({ value, onChange }) {
   );
 }
 
-function Terminal({ output = '' }) {
+function Terminal({ output = "" }) {
   return (
     <textarea
       id="terminal"
       name="terminal"
       rows={6}
-      className="w-full rounded-xl border border-slate-800 bg-slate-950 text-slate-100 font-mono text-sm leading-6 shadow-inner focus:outline-none"
+      className="w-full rounded-xl border border-amber-500/40 bg-slate-950 text-slate-100 font-mono text-sm leading-6 shadow-inner outline-none focus:outline-none caret-amber-400"
       placeholder="Terminal output..."
       spellCheck="false"
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
       readOnly
-      value={output || ''}
+      value={output || ""}
     ></textarea>
   );
 }
@@ -435,7 +445,7 @@ function RunResult({ result, sampleCase }) {
 
   const formatVal = (val) => {
     if (val === undefined || val === null) return String(val);
-    if (typeof val === 'string') return val;
+    if (typeof val === "string") return val;
     try {
       return JSON.stringify(val, null, 2);
     } catch (e) {
@@ -444,10 +454,7 @@ function RunResult({ result, sampleCase }) {
   };
 
   const renderCode = (content, opts = {}) => {
-    const {
-      language = 'python',
-      accentClass = 'text-slate-100',
-    } = opts;
+    const { language = "python", accentClass = "text-slate-100" } = opts;
     return (
       <div className="rounded-lg bg-slate-900/80 ring-1 ring-slate-800">
         <SyntaxHighlighter
@@ -455,15 +462,15 @@ function RunResult({ result, sampleCase }) {
           style={atomDark}
           customStyle={{
             margin: 0,
-            borderRadius: '0.75rem',
-            background: 'transparent',
-            padding: '12px 14px',
-            fontSize: '13px',
+            borderRadius: "0.75rem",
+            background: "transparent",
+            padding: "12px 14px",
+            fontSize: "13px",
           }}
           codeTagProps={{ className: `!bg-transparent ${accentClass}` }}
           wrapLongLines
         >
-          {content || ' '}
+          {content || " "}
         </SyntaxHighlighter>
       </div>
     );
@@ -472,27 +479,31 @@ function RunResult({ result, sampleCase }) {
   const inputs = Array.isArray(sampleCase?.input)
     ? sampleCase.input
     : sampleCase?.input !== undefined && sampleCase?.input !== null
-      ? [sampleCase.input]
-      : null;
+    ? [sampleCase.input]
+    : null;
 
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between text-sm font-semibold text-slate-200">
-        <span>{result.source === 'submit' ? 'Judge Result' : 'Run Result'}</span>
+        <span>{result.source === "submit" ? "Judge Result" : "Run Result"}</span>
         {result.success !== undefined ? (
           <span
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
-              result.success ? 'bg-emerald-500/15 text-emerald-300' : 'bg-rose-500/15 text-rose-300'
+              result.success
+                ? "bg-emerald-500/15 text-emerald-300"
+                : "bg-rose-500/15 text-rose-300"
             }`}
           >
-            {result.success ? 'Passed' : 'Mismatch'}
+            {result.success ? "Passed" : "Mismatch"}
           </span>
         ) : null}
       </div>
 
       {inputs ? (
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Input</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+            Input
+          </p>
           <div className="space-y-2">
             {inputs.map((val, idx) => (
               <div key={idx} className="space-y-1">
@@ -507,26 +518,46 @@ function RunResult({ result, sampleCase }) {
       ) : null}
 
       <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Stdout</p>
-        {renderCode(formatVal(result.stdout || ''), { accentClass: 'text-emerald-200', language: 'text' })}
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+          Stdout
+        </p>
+        {renderCode(formatVal(result.stdout || ""), {
+          accentClass: "text-emerald-200",
+          language: "text",
+        })}
       </div>
 
       <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Output</p>
-        {renderCode(formatVal(result.output), { accentClass: 'text-orange-200', language: 'python' })}
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+          Output
+        </p>
+        {renderCode(formatVal(result.output), {
+          accentClass: "text-orange-200",
+          language: "python",
+        })}
       </div>
 
       {result.expected !== undefined ? (
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Expected</p>
-          {renderCode(formatVal(result.expected), { accentClass: 'text-emerald-300', language: 'python' })}
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+            Expected
+          </p>
+          {renderCode(formatVal(result.expected), {
+            accentClass: "text-emerald-300",
+            language: "python",
+          })}
         </div>
       ) : null}
 
       {result.stderr ? (
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Stderr</p>
-          {renderCode(formatVal(result.stderr), { accentClass: 'text-rose-200', language: 'text' })}
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+            Stderr
+          </p>
+          {renderCode(formatVal(result.stderr), {
+            accentClass: "text-rose-200",
+            language: "text",
+          })}
         </div>
       ) : null}
     </div>
@@ -546,48 +577,48 @@ function Button({ label, onClick, disabled }) {
   );
 }
 
-function CodeForm({ selectedProblemId = '' }) {
+function CodeForm({ selectedProblemId = "" }) {
   const { status: pyStatus, error: pyError, load, runCode } = usePyodide();
   const [result, setResult] = React.useState(null);
-  const [codeValue, setCodeValue] = React.useState('');
+  const [codeValue, setCodeValue] = React.useState("");
   const [isRunning, setIsRunning] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [prefillError, setPrefillError] = React.useState('');
+  const [prefillError, setPrefillError] = React.useState("");
   const [sampleCase, setSampleCase] = React.useState(null);
-  const [execName, setExecName] = React.useState('');
+  const [execName, setExecName] = React.useState("");
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV === 'test') return;
+    if (process.env.NODE_ENV === "test") return;
     load().catch(() => null);
   }, [load]);
 
   React.useEffect(() => {
     if (!selectedProblemId) {
-      setCodeValue('');
-      setPrefillError('');
+      setCodeValue("");
+      setPrefillError("");
       setSampleCase(null);
-      setExecName('');
+      setExecName("");
       setResult(null);
       return;
     }
 
     let isActive = true;
-    setPrefillError('');
+    setPrefillError("");
     fetch(`/api/problem/${selectedProblemId}`)
       .then((res) => res.json())
       .then((data) => {
         if (!isActive) return;
         if (data.success) {
           const info = data.info || {};
-          setCodeValue(info?.content?.sampleCode || '');
-          setExecName(info?.content?.execuationCode || '');
+          setCodeValue(info?.content?.sampleCode || "");
+          setExecName(info?.content?.execuationCode || "");
         } else {
-          setPrefillError('Unable to load sample code for this problem.');
+          setPrefillError("Unable to load sample code for this problem.");
         }
       })
       .catch(() => {
         if (!isActive) return;
-        setPrefillError('Unable to load sample code for this problem.');
+        setPrefillError("Unable to load sample code for this problem.");
       });
 
     fetch(`/api/problem/${selectedProblemId}/case`)
@@ -596,7 +627,7 @@ function CodeForm({ selectedProblemId = '' }) {
         if (!isActive) return;
         if (data.success) {
           setSampleCase(data.case);
-          if (!execName) setExecName((prev) => prev || data.exec || '');
+          if (!execName) setExecName((prev) => prev || data.exec || "");
         } else {
           setSampleCase(null);
         }
@@ -613,15 +644,18 @@ function CodeForm({ selectedProblemId = '' }) {
 
   const handleRunLocally = async () => {
     if (!selectedProblemId) {
-      setResult({ success: false, output: 'Please select a problem first.' });
+      setResult({ success: false, output: "Please select a problem first." });
       return;
     }
     if (!sampleCase) {
-      setResult({ success: false, output: 'Sample test case not available.' });
+      setResult({ success: false, output: "Sample test case not available." });
       return;
     }
     if (!execName) {
-      setResult({ success: false, output: 'Function entry point missing for this problem.' });
+      setResult({
+        success: false,
+        output: "Function entry point missing for this problem.",
+      });
       return;
     }
     setIsRunning(true);
@@ -634,15 +668,15 @@ function CodeForm({ selectedProblemId = '' }) {
       const matches = JSON.stringify(outputVal) === JSON.stringify(sampleCase.expected);
       setResult({
         success: matches,
-        stdout: stdout || '',
-        stderr: stderr || '',
+        stdout: stdout || "",
+        stderr: stderr || "",
         output: outputVal,
         expected: sampleCase.expected,
         input: sampleCase.input,
-        source: 'run',
+        source: "run",
       });
     } catch (err) {
-      setResult({ success: false, output: err?.message || 'Failed to run code.' });
+      setResult({ success: false, output: err?.message || "Failed to run code." });
     } finally {
       setIsRunning(false);
     }
@@ -650,37 +684,48 @@ function CodeForm({ selectedProblemId = '' }) {
 
   const handleSubmitCode = async () => {
     if (!selectedProblemId) {
-      setResult({ success: false, output: 'Please select a problem first.' });
+      setResult({ success: false, output: "Please select a problem first." });
       return;
     }
     setIsSubmitting(true);
     try {
       const formdata = new FormData();
-      formdata.append('problem_selected', selectedProblemId);
-      formdata.append('code', codeValue);
-      const response = await fetch('/api/submit_code', {
-        method: 'POST',
+      formdata.append("problem_selected", selectedProblemId);
+      formdata.append("code", codeValue);
+      const response = await fetch("/api/submit_code", {
+        method: "POST",
         body: formdata,
       });
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseErr) {
+        const text = await response.text();
+        throw new Error(text || "Server returned non-JSON response.");
+      }
       setResult({
         success: data.success,
         output: data.output,
-        source: 'submit',
+        source: "submit",
       });
     } catch (err) {
-      setResult({ success: false, output: err?.message || 'Submit failed.' });
+      setResult({
+        success: false,
+        output: err?.message || "Submit failed.",
+        stderr: "",
+        source: "submit",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const statusBadge =
-    pyStatus === 'ready'
-      ? 'bg-emerald-500/15 text-emerald-300'
-      : pyStatus === 'loading'
-        ? 'bg-amber-500/15 text-amber-200'
-        : 'bg-rose-500/15 text-rose-200';
+    pyStatus === "ready"
+      ? "bg-emerald-500/15 text-emerald-300"
+      : pyStatus === "loading"
+      ? "bg-amber-500/15 text-amber-200"
+      : "bg-rose-500/15 text-rose-200";
 
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-card">
@@ -693,35 +738,49 @@ function CodeForm({ selectedProblemId = '' }) {
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded-full bg-slate-800 px-3 py-1 text-xs font-medium text-slate-200">
-            {selectedProblemId ? `#${selectedProblemId}` : 'No selection'}
+            {selectedProblemId ? `#${selectedProblemId}` : "No selection"}
           </span>
-          <span className={`rounded-full px-3 py-1 text-[11px] font-semibold ${statusBadge}`}>
-            {pyStatus === 'ready' ? 'Pyodide ready' : pyStatus === 'loading' ? 'Loading Pyodide' : 'Pyodide error'}
+          <span
+            className={`rounded-full px-3 py-1 text-[11px] font-semibold ${statusBadge}`}
+          >
+            {pyStatus === "ready"
+              ? "Pyodide ready"
+              : pyStatus === "loading"
+              ? "Loading Pyodide"
+              : "Pyodide error"}
           </span>
         </div>
       </div>
 
       <div className="mt-4 space-y-4">
         <CodeEditor value={codeValue} onChange={setCodeValue} />
-        {prefillError ? (
-          <p className="text-sm text-amber-300">{prefillError}</p>
-        ) : null}
+        {prefillError ? <p className="text-sm text-amber-300">{prefillError}</p> : null}
         <div className="flex flex-wrap gap-3">
-          <Button label={isRunning ? 'Running...' : 'Run in browser'} onClick={handleRunLocally} disabled={isRunning || pyStatus === 'error'} />
-          <Button label={isSubmitting ? 'Submitting...' : 'Submit to judge'} onClick={handleSubmitCode} disabled={isSubmitting} />
+          <Button
+            label={isRunning ? "Running..." : "Run in browser"}
+            onClick={handleRunLocally}
+            disabled={isRunning || pyStatus === "error"}
+          />
+          <Button
+            label={isSubmitting ? "Submitting..." : "Submit to judge"}
+            onClick={handleSubmitCode}
+            disabled={isSubmitting}
+          />
         </div>
       </div>
 
       <div className="mt-6 space-y-3">
         <RunResult result={result} sampleCase={sampleCase} />
-        {pyError ? <p className="text-sm text-rose-300">Pyodide error: {pyError}</p> : null}
+        {pyError ? (
+          <p className="text-sm text-rose-300">Pyodide error: {pyError}</p>
+        ) : null}
       </div>
     </div>
   );
 }
 
 function App() {
-  const [selectedProblemId, setSelectedProblemId] = React.useState('');
+  const [selectedProblemId, setSelectedProblemId] = React.useState("");
 
   return (
     <div className="App bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900">

@@ -1,6 +1,7 @@
 from pathlib import Path
 import json
 import copy
+import traceback
 
 def loadInput(id):
     folder = Path("instance") / id
@@ -8,7 +9,8 @@ def loadInput(id):
         if txt.name == "in.txt":
             with open(txt, "r", encoding="utf-8") as f:
                 loadedList = eval(f.read())
-                return loadedList
+                return loadedList if loadedList is not None else []
+    return []
                 
 def loadOutput(id):
     folder = Path("instance") / id
@@ -16,7 +18,8 @@ def loadOutput(id):
         if txt.name == "out.txt":
             with open(txt, "r", encoding="utf-8") as f:
                 loadedList = eval(f.read())
-                return loadedList
+                return loadedList if loadedList is not None else []
+    return []
             
 def getExecuationCode(id):
     di = Path("instance") / id
@@ -41,14 +44,28 @@ def isbBuiltinClass(obj):
     return module_name == 'builtins'
 
 def judge(id, code):
-        stdin = loadInput(id)
-        stdout = loadOutput(id)
-        for i in range(len(stdin)):
-            currentInput = copy.deepcopy(stdin[i])
-            output = execuation(code, getExecuationCode(id), stdin[i])
-            if output != stdout[i]:
-                
-                return f"Result unmatch. At test case {i + 1}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput: {output}\nExpected Output: {stdout[i]}"
-        return "Success"
+    stdin = loadInput(id) or []
+    stdout = loadOutput(id) or []
+
+    if len(stdin) != len(stdout):
+        return False, f"Test data error: input cases ({len(stdin)}) and output cases ({len(stdout)}) count mismatch."
+
+    for i in range(len(stdin)):
+        currentInput = copy.deepcopy(stdin[i])
+        try:
+            args = currentInput if isinstance(currentInput, (list, tuple)) else [currentInput]
+            output = execuation(code, getExecuationCode(id), args)
+        except Exception:
+            tb = traceback.format_exc()
+            return False, f"Execution error at test case {i + 1}:\n{tb}"
+
+        if output != stdout[i]:
+            return False, (
+                f"Result unmatch. At test case {i + 1}\n"
+                f"Input: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, copy.deepcopy(args)))}\n"
+                f"Output: {output}\nExpected Output: {stdout[i]}"
+            )
+
+    return True, "Success"
     
     
