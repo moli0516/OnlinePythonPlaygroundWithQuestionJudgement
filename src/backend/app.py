@@ -100,7 +100,7 @@ def apiSubmitCode():
     try:
         data = fl.request.form.get("code", "")
         id = fl.request.form.get('problem_selected', "")
-        output = codeJudge.judge(id, data)
+        success, output = codeJudge.judge(id, data)
         return fl.jsonify({
             'success': True,
             'output': output
