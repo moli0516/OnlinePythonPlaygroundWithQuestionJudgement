@@ -18,7 +18,7 @@
 
             "sampleCode": "# definition of stack.\n# class Stack:\n#     def __init__(self, nums = None):\n#         self.nums = nums\n#     def pop(self):\n#         return the top item and remove it\n#     def push(self, val):\n#         add val on the top of the stack\n\ndef removeBoxes(boxes: Optional[Stack], n: int):",
 
-            "execuationCode": "removeBoxes",
+            "execName": "removeBoxes",
             
             "examples": [
                 {

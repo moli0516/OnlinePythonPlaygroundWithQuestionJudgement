@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 import copy
-import traceback
+import dataStructure as ds
 
 def loadInput(id):
     folder = Path("instance") / id
@@ -9,8 +9,7 @@ def loadInput(id):
         if txt.name == "in.txt":
             with open(txt, "r", encoding="utf-8") as f:
                 loadedList = eval(f.read())
-                return loadedList if loadedList is not None else []
-    return []
+                return loadedList
                 
 def loadOutput(id):
     folder = Path("instance") / id
@@ -18,17 +17,16 @@ def loadOutput(id):
         if txt.name == "out.txt":
             with open(txt, "r", encoding="utf-8") as f:
                 loadedList = eval(f.read())
-                return loadedList if loadedList is not None else []
-    return []
+                return loadedList
             
-def getExecuationCode(id):
+def getExecName(id):
     di = Path("instance") / id
     for json_file in di.glob('*.json'):
         with open(json_file, 'r', encoding="utf-8") as f:
             data = json.load(f)
-            return data['problem']['content']['execuationCode']
+            return data['problem']['content']['execName']
         
-def execuation(code_string, function_name, args=None, kwargs=None):
+def execFunction(code_string, function_name, args=None, kwargs=None):
     if args is None:
         args = []
     if kwargs is None:
@@ -37,35 +35,26 @@ def execuation(code_string, function_name, args=None, kwargs=None):
     exec(code_string, namespace)
     if function_name in namespace :
         func = namespace[function_name]
-        return func(*args, **kwargs)
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            return e
 
 def isbBuiltinClass(obj):
     module_name = obj.__class__.__module__
     return module_name == 'builtins'
 
 def judge(id, code):
-    stdin = loadInput(id) or []
-    stdout = loadOutput(id) or []
-
-    if len(stdin) != len(stdout):
-        return False, f"Test data error: input cases ({len(stdin)}) and output cases ({len(stdout)}) count mismatch."
-
-    for i in range(len(stdin)):
-        currentInput = copy.deepcopy(stdin[i])
-        try:
-            args = currentInput if isinstance(currentInput, (list, tuple)) else [currentInput]
-            output = execuation(code, getExecuationCode(id), args)
-        except Exception:
-            tb = traceback.format_exc()
-            return False, f"Execution error at test case {i + 1}:\n{tb}"
-
-        if output != stdout[i]:
-            return False, (
-                f"Result unmatch. At test case {i + 1}\n"
-                f"Input: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, copy.deepcopy(args)))}\n"
-                f"Output: {output}\nExpected Output: {stdout[i]}"
-            )
-
-    return True, "Success"
+        stdin = loadInput(id)
+        stdout = loadOutput(id)
+        for i in range(len(stdin)):
+            currentInput = copy.deepcopy(stdin[i])
+            output = execFunction(code, getExecName(id), stdin[i])
+            if isinstance(output, Exception):
+                return f"Error occurred: {str(output)} At test case {i + 1}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}"
+            if output != stdout[i]:
+                return f"Result unmatch. At test case {i + 1}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput: {output}\nExpected Output: {stdout[i]}"
+            
+        return "Success"
     
     

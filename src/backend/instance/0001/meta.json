@@ -21,7 +21,7 @@
 
             "sampleCode": "def binarySearch(n: int, target: int, nums: list[int]):",
 
-            "execuationCode": "binarySearch",
+            "execName": "binarySearch",
             
             "examples": [
                 {

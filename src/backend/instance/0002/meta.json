@@ -20,7 +20,7 @@
 
             "sampleCode": "def bubbleSort(n: int, nums: list[int]):",
 
-            "execuationCode": "bubbleSort",
+            "execName": "bubbleSort",
             
             "examples": [
                 {
