@@ -3,35 +3,8 @@ import os
 from flask_cors import CORS
 import subprocess
 import sys
-import json
-from pathlib import Path
 import codeJudge
-
-DATADIR = Path('instance')
-
-
-def loadProblemList():
-    problems = []
-    for folder in DATADIR.iterdir():
-        for json_file in folder.glob('*.json'):
-            with open(json_file, 'r', encoding="utf-8") as f:
-                data = json.load(f)
-                if 'problem' in data:
-                    problem = data['problem']
-                    problems.append({
-                        'id': problem.get('id', ''),
-                        'title': problem.get('title', '無標題'),
-                    })
-    return problems
-
-def loadFullQuestion(id):
-    di = Path("instance") / id
-    for json_file in di.glob('*.json'):
-        with open(json_file, 'r', encoding="utf-8") as f:
-            data = json.load(f)
-            if 'problem' in data:
-                problem = data['problem']
-                return problem
+import fetchProblem
 
 app = fl.Flask(__name__)
 CORS(app, resources={
@@ -43,17 +16,9 @@ CORS(app, resources={
     }
 })
 
-problems = loadProblemList()    
-
-@app.route("/")
-def index():
-    selected_problem = fl.request.args.get('problem', '')
-    if not selected_problem:
-        selected_problem = fl.request.cookies.get('last_selected_problem', '')
-    return fl.render_template("index.html", problems = problems, selected_problem = selected_problem)
-
 @app.route("/api/problems")
 def apiGetProblems():
+    problems = fetchProblem.getProblems()
     return fl.jsonify({
         'success': True,
         'problems': problems
@@ -61,7 +26,8 @@ def apiGetProblems():
 
 @app.route("/api/problem/<id>")
 def apiGetProblem(id):
-    content = loadFullQuestion(id)
+    problem = fetchProblem.Problem(id)
+    content = problem.getFullProblem()
     if content:
         return fl.jsonify({
             'success': True,
@@ -70,9 +36,10 @@ def apiGetProblem(id):
 
 @app.route("/api/problem/<id>/case")
 def apiGetProblemCase(id):
+    problem = fetchProblem.Problem(id)
     try:
-        inputs = codeJudge.loadInput(id)
-        outputs = codeJudge.loadOutput(id)
+        inputs = problem.getInNOut(fetchProblem.INNAME)
+        outputs = problem.getInNOut(fetchProblem.OUTNAME)
         if not inputs or not outputs:
             return fl.jsonify({"success": False, "message": "No test cases found."}), 404
         return fl.jsonify({
@@ -110,24 +77,6 @@ def apiSubmitCode():
             'success': False,
             'output': f"Judge error: {e}"
         }), 500
-
-@app.route("/run_code", methods = ["POST"])
-def processData():
-    if fl.request.method == "POST":
-        data = fl.request.form["code"]
-        print(data, flush=True)
-        output = subprocess.run([sys.executable, "-c",data], capture_output=True, text=True)
-        print(output.stdout, flush=True)
-    return fl.render_template("index.html", value = f"{output.stdout}\n{output.stderr}", code = data, problems = problems)
-
-@app.route("/submit_code", methods = ["POST"])
-def judgeTheCode():
-    if fl.request.method == "POST":
-        data = fl.request.form["code"]
-        id = fl.request.form['problem_select']
-        print(id)
-        output = codeJudge.judge(id, data)
-    return fl.render_template("index.html", value = f"{output}", code = data, problems = problems, selected_problem = id)
 
 if __name__ == "__main__":
     host = os.environ.get("HOST", "0.0.0.0")
