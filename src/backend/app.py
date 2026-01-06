@@ -40,6 +40,7 @@ def apiGetProblemCase(id):
     try:
         inputs = problem.getInNOut(fetchProblem.INNAME)
         outputs = problem.getInNOut(fetchProblem.OUTNAME)
+        execName = problem.getExecName()
         if not inputs or not outputs:
             return fl.jsonify({"success": False, "message": "No test cases found."}), 404
         return fl.jsonify({
@@ -48,7 +49,7 @@ def apiGetProblemCase(id):
                 "input": inputs[0],
                 "expected": outputs[0]
             },
-            "exec": codeJudge.getExecName(id)
+            "exec": execName
         })
     except Exception as e:
         return fl.jsonify({"success": False, "message": str(e)}), 500
