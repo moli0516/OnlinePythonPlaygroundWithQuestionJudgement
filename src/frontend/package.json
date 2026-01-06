@@ -11,10 +11,12 @@
     "prismjs": "^1.30.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-router-dom": "^7.11.0",
     "react-scripts": "5.0.1",
     "react-simple-code-editor": "^0.14.1",
     "react-syntax-highlighter": "^16.1.0",
     "refractor": "^5.0.0",
+    "sql.js": "^1.13.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -42,6 +44,11 @@
     ]
   },
   "proxy": "http://localhost:8000",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "crypto": false
+  },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "autoprefixer": "^10.4.20",
