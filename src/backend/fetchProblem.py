@@ -48,7 +48,25 @@ class Problem:
         decodedJson = base64.b64decode(data).decode('utf-8')
         return eval(decodedJson)
     def getExecName(self):
-        return self.getFullProblem()['content']['execName']
+        try:
+            return self.getFullProblem()['content']['execName']
+        except:
+            pass
+    def getClassName(self):
+        try:
+            return self.getFullProblem()['content']['className']
+        except:
+            pass
+    def getHiddenCode(self):
+        try:
+            return self.getFullProblem()['content']['hiddenCode']
+        except:
+            return ""
+    def getHiddenSuffix(self):
+        try:
+            return self.getFullProblem()['content']['hiddenSuffix']
+        except:
+            return ""
 
 
 def getProblems():
