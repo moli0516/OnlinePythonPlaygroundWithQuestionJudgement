@@ -67,7 +67,7 @@ def judge(code, id):
                     return False, f"Error occurred: {str(e)} At test case {i + 1} / {len(stdin)}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}"
                 if outputs != stdout[i][0]:
                     return False, f"Result unmatch. At test case {i + 1} / {len(stdin)}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput: {outputs}\nExpected Output: {stdout[i]}"
-            if obj != Cls(**stdout[i][1]):
-                return False, f"Final object state unmatch. At test case {i + 1} / {len(stdin)}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput Object: {obj.__dict__}\nExpected Object: {Cls(**stdout[i][1]).__dict__}"
+                if obj != Cls(**stdout[i][1]):
+                    return False, f"Final object state unmatch. At test case {i + 1} / {len(stdin)}\nInput: {tuple(map(lambda x: repr(x) if not(isbBuiltinClass(x)) else x, currentInput))}\nOutput Object: {obj.__dict__}\nExpected Object: {Cls(**stdout[i][1]).__dict__}"
 
             return True, f"Success, {len(stdin)} test cases passed."
